@@ -1,5 +1,15 @@
 # TCP Modbus server for UniPi Neuron series:
 
+Installation:
+Get the latest release source code, eg:
+ `wget https://github.com/UniPiTechnology/neuron_tcp_modbus_overlay/archive/v1.0.0.zip`
+ 
+Unzip it
+ `unzip v1.0.0.zip`
+
+And run the installation scrip as root (requires make tools and libmodbus)
+ `bash neuron_tcp_modbus_overlay-1.0.0/install.sh`
+
 ## Neuron Modbus TCP Server
 This daemon provides standard TCP Modbus interface for all controllers from the [UniPi Neuron series].
 Handles low level communication on SPI with all of the CPUs. It also handles creation of PTYs(pseudoterminal or also virtual serial lines) in /dev/extcomm/x/y by the type of the product and is able to update firmware of each CPU.
@@ -13,7 +23,7 @@ See the [downloads.unipi.technology] for Modbus registers mapping and explanatio
 * [libmodbus]
 
 ### Installation
-Run the install script `bash install.sh` as root user to take care of everything or manually run the Makefile (requires make tools and libmodbus) 
+Use the install (as noted above) script or run the Makefile 
 
 ### Usage:
 ./neuron_tcp_server [-v[v]] [-d] [-l listen_address] [-p port] [-s dev1[,dev2[,dev3]]] [-i gpio1[,gpio2[,gpio3]]] [-b [baud1,..] [-f firmwaredir] [-c]

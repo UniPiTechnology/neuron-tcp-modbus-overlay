@@ -2,13 +2,16 @@
 
 Installation:
 Get the latest release source code, eg:
- `wget https://github.com/UniPiTechnology/neuron_tcp_modbus_overlay/archive/v1.0.0.zip`
+
+ ```wget https://github.com/UniPiTechnology/neuron_tcp_modbus_overlay/archive/v1.0.0.zip```
  
 Unzip it
- `unzip v1.0.0.zip`
+
+ ```unzip v1.0.0.zip```
 
 And run the installation scrip as root (requires make tools and libmodbus)
- `bash neuron_tcp_modbus_overlay-1.0.0/install.sh`
+
+ ```bash neuron_tcp_modbus_overlay-1.0.0/install.sh```
 
 ## Neuron Modbus TCP Server
 This daemon provides standard TCP Modbus interface for all controllers from the [UniPi Neuron series].

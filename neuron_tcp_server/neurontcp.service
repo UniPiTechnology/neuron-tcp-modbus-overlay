@@ -1,0 +1,20 @@
+[Unit]
+Description=Unipi Neuron Modbus/Tcp Server
+
+[Service]
+Type=simple
+ExecStart=/opt/neurontcp/neuron_tcp_server -p 502 --check-firmware
+TimeoutStopSec=3
+SyslogLevel=debug
+SyslogIdentifier=neuron
+
+WorkingDirectory=/opt/neurontcp
+
+#User=evok
+#Group=evok
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+Alias=neurontcp.service

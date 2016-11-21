@@ -1,0 +1,6 @@
+#!/bin/sh
+
+dtc -@ -I dts -O dtb -o neuron-spi.dtbo neuron-spi.dts
+cp neuron-spi.dtbo /boot/overlays
+
+#add dtoverlay=neuron-spi to /boot/config.txt

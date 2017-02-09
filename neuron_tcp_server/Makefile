@@ -102,5 +102,5 @@ clean:
 
 install:
 	mkdir -p $(DESTDIR)/opt/neurontcp
-	install -m 0755 neuron_tcp_server /opt/neurontcp
+	install -m 0755 neuron_tcp_server $(DESTDIR)/opt/neurontcp
 # *** EOF ***

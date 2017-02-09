@@ -46,7 +46,7 @@ install_overlay() {
 }
 
 install_neuron_tcp_server() {
-    mkdir /opt/neurontcp
+    #mkdir /opt/neurontcp
     cd neuron_tcp_server
     echo "Compiling neurontcp server..."
     make

@@ -99,4 +99,7 @@ clean:
 	-rm -rf $(PROJECT).rw
 	-rm -rf $(SRC:.c=.lst)
 	-rm -rf $(ASRC:.s=.lst)
+
+install:
+    install -m 0755 neuron_tcp_server /opt/neurontcp
 # *** EOF ***

@@ -51,8 +51,9 @@ install_neuron_tcp_server() {
     echo "Compiling neurontcp server..."
     make
     echo "Installing Neuron TCP server into /opt/neurontcp/"
-    cp neuron_tcp_server /opt/neurontcp/
-    chmod +x /opt/neurontcp/neuron_tcp_server
+    make install
+    #cp neuron_tcp_server /opt/neurontcp/
+    #chmod +x /opt/neurontcp/neuron_tcp_server
     echo "Enabling neurontcp service for systemd"
     cp neurontcp.service /lib/systemd/system/
     cd ..

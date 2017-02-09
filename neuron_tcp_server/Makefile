@@ -101,5 +101,6 @@ clean:
 	-rm -rf $(ASRC:.s=.lst)
 
 install:
-	install -m -D 0755 neuron_tcp_server /opt/neurontcp
+    mkdir /opt/neurontcp
+	install -m 0755 neuron_tcp_server /opt/neurontcp
 # *** EOF ***

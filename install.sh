@@ -46,14 +46,11 @@ install_overlay() {
 }
 
 install_neuron_tcp_server() {
-    #mkdir /opt/neurontcp
     cd neuron_tcp_server
     echo "Compiling neurontcp server..."
     make
     echo "Installing Neuron TCP server into /opt/neurontcp/"
     make install
-    #cp neuron_tcp_server /opt/neurontcp/
-    #chmod +x /opt/neurontcp/neuron_tcp_server
     echo "Enabling neurontcp service for systemd"
     cp neurontcp.service /lib/systemd/system/
     cd ..

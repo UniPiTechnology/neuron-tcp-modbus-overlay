@@ -21,6 +21,8 @@ Handles low level communication on SPI with all of the CPUs. It also handles cre
 
 See the [downloads.unipi.technology] for Modbus registers mapping and explanation.
 
+[Evok] (the official UniPi API) uses this daemon and provides another webservices and also provides access to 1Wire sensors.
+
 ### Prerequisites:
 * spi_overlay - spi overlay for the Neuron controllers to allow custom CS for SPI
 * [libmodbus]
@@ -59,3 +61,4 @@ Use the install (as noted above) script or call `sh compile-dtc` to compile the 
 [UniPi Neuron series]:http://unipi.technology
 [libmodbus]:http://libmodbus.org/
 [downloads.unipi.technology]:http://downloads.unipi.technology
+[Evok]:https://github.com/UniPiTechnology/evok

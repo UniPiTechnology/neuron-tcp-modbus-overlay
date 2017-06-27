@@ -3,7 +3,7 @@
 Installation:
 Get the latest release source code, e.g. from:
 
- ```wget https://github.com/UniPiTechnology/neuron_tcp_modbus_overlay/archive/v1.0.0.zip```
+ ```wget https://github.com/UniPiTechnology/neuron_tcp_modbus_overlay/archive/v1.0.1.zip```
  
 Unzip it:
 
@@ -17,7 +17,7 @@ And run the installation script as root (requires make tools and libmodbus):
 This daemon provides standard TCP Modbus interface for all controllers from the [UniPi Neuron series].
 Handles low level communication on SPI with all of the embedded CPUs. Also handles creation of PTYs (pseudo-terminal or also virtual serial lines) in /dev/extcomm/x/y by the type of the product and is able to update the firmware of every CPU.
 
-**Provides access to 1-Wire as well!**
+**Provides access to 1-Wire as well**
 
 See the [downloads.unipi.technology] for mapping and explanation of Modbus registers.
 

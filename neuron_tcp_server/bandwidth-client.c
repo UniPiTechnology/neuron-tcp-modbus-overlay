@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     }
 
     if (use_backend == TCP) {
-        ctx = modbus_new_tcp("192.168.1.121", 502);
+        ctx = modbus_new_tcp("192.168.1.11", 502);
 //        ctx = modbus_new_tcp("192.168.1.121", 1502);
         modbus_set_slave(ctx, 1);
     } else {

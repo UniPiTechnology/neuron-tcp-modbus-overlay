@@ -49,7 +49,7 @@
 //char gpio_int[3][5] = { "27", "23", "22" };
 
 char* spi_devices[MAX_ARMS] = {"/dev/spidev0.1","/dev/spidev0.3","/dev/spidev0.2"};
-int spi_speed[MAX_ARMS] = {12000000,12000000,12000000};
+int spi_speed[MAX_ARMS] = {0,0,0};
 char* gpio_int[MAX_ARMS] = { "27", "23", "22" };
 char* firmwaredir = "/opt/fw";
 int do_check_fw = 0;
@@ -60,6 +60,7 @@ int do_check_fw = 0;
 
 #define MAX_MB_BUFFER_LEN   MODBUS_TCP_MAX_ADU_LENGTH
 #define MB_BUFFER_COUNT  128;
+#define DEFAULT_POLL_TIMEOUT 20             // milisec
 
 nb_modbus_t *nb_ctx = NULL;
 int server_socket;
@@ -277,6 +278,8 @@ static struct option long_options[] = {
   {"daemon",  no_argument,       0, 'd'},
   {"listen",  required_argument, 0, 'l'},
   {"port",    required_argument, 0, 'p'},
+  {"timeout", required_argument, 0, 't'},
+  {"nsspause", required_argument, 0, 'n'},
   {"spidev", required_argument, 0, 's'},
   {"interrupts",required_argument, 0, 'i'},
   {"bauds",required_argument, 0, 'b'},
@@ -353,9 +356,10 @@ int main(int argc, char *argv[])
     int tcp_port = 502;
     char listen_address[100] = "0.0.0.0";
 
+    int poll_timeout = 0;
     int daemon = 0;
     int server_socket;
-    int s;
+    int s, nss;
     int efd;
     struct epoll_event event;
     struct epoll_event *events;
@@ -365,7 +369,7 @@ int main(int argc, char *argv[])
     int c;
     while (1) {
        int option_index = 0;
-       c = getopt_long(argc, argv, "vdcl:p:s:i:f:", long_options, &option_index);
+       c = getopt_long(argc, argv, "vdcl:p:t:s:b:i:f:n:", long_options, &option_index);
        if (c == -1) {
            if (optind < argc)  {
                printf ("non-option ARGV-element: %s\n", argv[optind]);
@@ -390,6 +394,22 @@ int main(int argc, char *argv[])
            if (tcp_port==0) {
                printf("Port must be non-zero integer (given %s)\n", optarg);
                exit(EXIT_FAILURE);
+           }
+           break;
+       case 't':
+           poll_timeout = atoi(optarg);
+           if (poll_timeout==0) {
+               printf("Timeout must be non-zero integer (given %s)\n", optarg);
+               exit(EXIT_FAILURE);
+           }
+           break;
+       case 'n':
+           nss = atoi(optarg);
+           if (nss <= 0) {
+               printf("Nss pause must be non-zero integer (given %s)\n", optarg);
+               exit(EXIT_FAILURE);
+           } else {
+               nss_pause = nss;
            }
            break;
        case 's':
@@ -444,7 +464,7 @@ int main(int argc, char *argv[])
         if ((dev != NULL) && (strlen(dev)>0)) {
             int speed = spi_speed[ai];
             if (!(speed > 0)) speed = spi_speed[0];
-            if (!(speed > 0)) speed = 12000000;
+            //if (!(speed > 0)) speed = 12000000;
             add_arm(nb_ctx, ai, dev, speed, gpio_int[ai]);
             if (nb_ctx->arm[ai] && do_check_fw)
                 arm_firmware(nb_ctx->arm[ai], firmwaredir, FALSE);
@@ -482,11 +502,15 @@ int main(int argc, char *argv[])
             event.events = EPOLLPRI;// | EPOLLET;
             event.data.ptr = event_data;
             s = epoll_ctl(efd, EPOLL_CTL_ADD, fdint, &event);
+        } else {
+            if (poll_timeout == 0) {
+                poll_timeout = DEFAULT_POLL_TIMEOUT;
+            }
         }
         /* ----- ToDo more Uarts */
         int pi, pty;
         //printf ("uarts = %d\n", arm->uart_count);
-        for (pi=0; pi < arm->uart_count; pi++) {
+        for (pi=0; pi < arm->bv.uart_count; pi++) {
             pty = armpty_open(arm, pi);
             if (pty >= 0) {
                 event_data = calloc(1, sizeof(mb_event_data_t));
@@ -500,7 +524,8 @@ int main(int argc, char *argv[])
         }
     }
 
-
+    if (poll_timeout == 0) poll_timeout = -1; 
+    if (verbose) printf ("poll timeout = %d[ms]\n", poll_timeout);
     /* Prepare buffer pool */
     pool_allocate();
 
@@ -534,12 +559,12 @@ int main(int argc, char *argv[])
         }
 
         int n, i;
-        n = epoll_wait (efd, events, MAXEVENTS, -1);
+        n = epoll_wait (efd, events, MAXEVENTS, poll_timeout);
         for (i = 0; i < n; i++) {
             event_data = events[i].data.ptr;
             /* ..  Check Interrupts .. */
             if (event_data->type == ED_INTERRUPT) {
-                //printf("INT on arm%d\n", event_data->arm->index);
+                if (verbose>1) printf("INT on arm%d\n", event_data->arm->index);
                 if ((events[i].events & EPOLLPRI) && (event_data->arm != NULL)) {
                     uint16_t intval;
                     fdint = event_data->fd;
@@ -700,12 +725,17 @@ int main(int argc, char *argv[])
                     if (count < wanted) break; //?? je to spravne ??
                 } /* while */
             } /* if EPOLLIN */
-            /*for (ai=0; ai < MAX_ARMS; ai++) {
-                arm_handle* arm = nb_ctx->arm[ai];
-                if (arm->uart_count>0)
-                    armpty_readuart(arm, 0);
-            }*/
             /* End of one event */
+        }
+        if (poll_timeout > 0) {
+          for (ai=0; ai < MAX_ARMS; ai++) {
+            arm_handle* arm = nb_ctx->arm[ai];
+            if (arm == NULL) continue;
+            if ((arm->bv.int_mask_register <= 0) && (arm->bv.uart_count>0)) {
+                if (verbose > 2) printf("readpty..\n");
+                armpty_readuart(arm, 1);
+            }
+          }
         }
     }
 }

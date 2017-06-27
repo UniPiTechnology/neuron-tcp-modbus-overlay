@@ -23,6 +23,7 @@
 
 #include "nb_modbus.h"
 #include "armspi.h"
+#include "armutil.h"
 
 int verbose = 0;
 int deferred_op = DFR_NONE;
@@ -353,9 +354,9 @@ int add_arm(nb_modbus_t*  nb_ctx, uint8_t index, const char *device, int speed, 
 }
 
 
-char* firmware_name(arm_handle* arm, const char* fwdir, const char* ext)
+char* _firmware_name(arm_handle* arm, const char* fwdir, const char* ext)
 {
-    const char* armname = arm_name(arm);
+    const char* armname = arm_name(arm->bv.hw_version);
     char* fwname = malloc(strlen(fwdir) + strlen(armname) + strlen(ext) + 2);
     strcpy(fwname, fwdir);
     if (strlen(fwname) && (fwname[strlen(fwname)-1] != '/')) strcat(fwname, "/");
@@ -365,7 +366,7 @@ char* firmware_name(arm_handle* arm, const char* fwdir, const char* ext)
 }
 
 
-int arm_flash_file(arm_handle* arm, const char* fwname)
+int arm_flash_file(void* fwctx, const char* fwname)
 {
     /* Firmware programming */
     int fd, ret;
@@ -379,7 +380,7 @@ int arm_flash_file(arm_handle* arm, const char* fwname)
             vprintf("Sending firmware file %s length=%d\n", fwname, len_file);
             if (len_file > min_len) { 
                 if((data=mmap(NULL, len_file, PROT_READ,MAP_PRIVATE, fd, 0)) != MAP_FAILED) {
-                    send_firmware(arm, (uint8_t*) data, len_file, 0);
+                    send_firmware(fwctx, (uint8_t*) data, len_file, 0);
                     munmap(data, len_file);
                 } else {
                     vprintf("Error mapping firmware file %s to memory\n", fwname);
@@ -394,7 +395,7 @@ int arm_flash_file(arm_handle* arm, const char* fwname)
     }
 }
 
-int arm_flash_rw_file(arm_handle* arm, const char* fwname, int overwrite)
+int arm_flash_rw_file(arm_handle* arm, void* fwctx, const char* fwname, int overwrite)
 {
     /* Nvram programming */
     int fd, ret;
@@ -412,10 +413,10 @@ int arm_flash_rw_file(arm_handle* arm, const char* fwname, int overwrite)
                 if ((n2000 > 0)|| overwrite) {
                     if((data=mmap(NULL, len_file, PROT_READ,MAP_PRIVATE, fd, 0)) != MAP_FAILED) {
                         if (overwrite) {
-                            send_firmware(arm, (uint8_t*) data, len_file,0xe000);
+                            send_firmware(fwctx, (uint8_t*) data, len_file,0xe000);
                         } else {
                             memcpy(buffer+n2000-1, ((uint8_t*) data) + 2*(n2000-1), len_file - 2*(n2000-1));
-                            send_firmware(arm, (uint8_t*) buffer, len_file,0xe000);
+                            send_firmware(fwctx, (uint8_t*) buffer, len_file,0xe000);
                         }
                         munmap(data, len_file);
                     } else {
@@ -438,7 +439,7 @@ int arm_flash_rw_file(arm_handle* arm, const char* fwname, int overwrite)
 int arm_firmware(arm_handle* arm, const char* fwdir, int overwrite)
 {
     /* Check version */
-    char* fwname = firmware_name(arm, fwdir, ".rw");
+    char* fwname = _firmware_name(arm, fwdir, ".rw");
     int fd;
     uint32_t fwver = 0;
 
@@ -451,13 +452,21 @@ int arm_firmware(arm_handle* arm, const char* fwdir, int overwrite)
         close(fd);
     }
     free(fwname);
-    if (fwver > ((arm->sw_version << 8) | arm->sw_subver)) {
-        fwname = firmware_name(arm, fwdir, ".rw");
-        arm_flash_rw_file(arm, fwname, overwrite);
+    if (fwver > arm->bv.sw_version) {
+        void * fwctx = start_firmware(arm);
+        if (fwctx == NULL) 
+            return -1; 
+        fwname = _firmware_name(arm, fwdir, ".rw");
+        arm_flash_rw_file(arm, fwctx, fwname, overwrite);
         free(fwname);
-        fwname = firmware_name(arm, fwdir, ".bin");
+        fwname = _firmware_name(fwctx, fwdir, ".bin");
         arm_flash_file(arm, fwname);
+        finish_firmware(fwctx);
         free(fwname);
-        arm_version(arm);
+        // Reload version
+        uint16_t configregs[5];
+        if (read_regs(arm, 1000, 5, configregs) == 5)
+            parse_version(&arm->bv, configregs);
+        //arm_version(arm);
     }
 }

@@ -127,8 +127,9 @@ int armpty_open(arm_handle* arm, uint8_t uart)
     }
     arm->uart_q[uart].masterpty = masterfd;
     uint16_t interrupt_mask = 5;
-    if (arm->sw_version)
-        write_regs(arm, arm->int_mask_register, 1, &interrupt_mask);
+    if ((arm->bv.sw_version) && (arm->bv.int_mask_register>0))
+        write_regs(arm, arm->bv.int_mask_register, 1, &interrupt_mask);
+        //printf("int mask : reg=%d mask=%x\n" , arm->bv.int_mask_register, interrupt_mask);
     return masterfd;
 }
 
@@ -201,12 +202,17 @@ int armpty_readuart(arm_handle* arm, int do_idle)
     int n;
     int wanted = sizeof(buffer);
     int nr = 0;
+    int tries = 3;
 
     if (do_idle) idle_op(arm);
     while ((n = arm->uart_q[uart].remain) > 0) {
         if (n > wanted) n = wanted;
         n = read_string(arm, uart, buffer + nr, n);
-        if (n < 0) break;
+        if (n < 0) {
+            if (--tries) continue;
+            break;
+        }
+        tries = 3;
         wanted -= n; 
         nr += n;
         if (wanted == 0) {

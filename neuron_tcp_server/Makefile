@@ -37,6 +37,7 @@ PROJECT        = neuron_tcp_server
 #SRC =  neuronmb.c
 SPISRC = armspi.c
 SPISRC += spicrc.c
+SPISRC +=  armutil.c
 SRC = $(SPISRC) nb_modbus.c armpty.c
 
 # List all directories here

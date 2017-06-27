@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 #include <linux/spi/spidev.h>
+#include "armutil.h"
 
 // brain/spi.h
 // Structures for communication header
@@ -79,17 +80,7 @@ typedef struct {
     uint8_t tx2[SNIPLEN2 + CRC_SIZE + 40];
     uint8_t rx2[SNIPLEN2 + CRC_SIZE + 40];
     struct spi_ioc_transfer tr[7];     // Transaction structure for 5 chunks
-    uint8_t sw_version;
-    uint8_t sw_subver;
-    uint8_t hw_version;
-    uint8_t hw_subver;
-    uint8_t di_count;
-    uint8_t do_count;
-    uint8_t ai_count;
-    uint8_t ao_count;
-    uint8_t uart_count;
-    uint8_t uled_count;
-    uint16_t int_mask_register;
+    Tboard_version bv;
     uart_queue uart_q[4];              // local queue for uarts on arm
 }  arm_handle;
 
@@ -105,9 +96,14 @@ int write_char(arm_handle* arm, uint8_t uart, uint8_t c);
 int write_string(arm_handle* arm, uint8_t uart, uint8_t* str, int len);
 int read_string(arm_handle* arm, uint8_t uart, uint8_t* str, int cnt);
 
-const char* arm_name(arm_handle* arm);
+//const char* arm_name(arm_handle* arm);
 
-int send_firmware(arm_handle* arm, uint8_t* data, size_t datalen, uint32_t start_address);
+void* start_firmware(arm_handle* arm);
+int send_firmware(void* ctx, uint8_t* data, size_t datalen, uint32_t start_address);
+void finish_firmware(void*  ctx);
+
+//int send_firmware(arm_handle* arm, uint8_t* data, size_t datalen, uint32_t start_address);
 extern int arm_verbose;
+extern int nss_pause;
 
 #endif

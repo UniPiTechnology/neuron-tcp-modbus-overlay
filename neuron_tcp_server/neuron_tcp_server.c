@@ -354,7 +354,7 @@ int parse_ilist(char * option, int* results)
 int main(int argc, char *argv[])
 {
     int tcp_port = 502;
-    char listen_address[100] = "0.0.0.0";
+    char listen_address[100] = "127.0.0.1";
 
     int poll_timeout = 0;
     int daemon = 0;

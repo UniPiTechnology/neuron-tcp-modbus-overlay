@@ -11,7 +11,8 @@ Unzip it:
 
 And run the installation script as root (requires make tools and libmodbus):
 
- ```bash neuron_tcp_modbus_overlay-1.0.1/install.sh```
+ ```cd neuron_tcp_modbus_overlay-1.0.1
+    bash install.sh```
 
 ## Neuron Modbus TCP Server
 This daemon provides standard TCP Modbus interface for all controllers from the [UniPi Neuron series].

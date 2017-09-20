@@ -115,4 +115,8 @@ clean:
 	-rm -rf $(PROJECT).rw
 	-rm -rf $(SRC:.c=.lst)
 	-rm -rf $(ASRC:.s=.lst)
+
+install:
+	mkdir -p $(DESTDIR)/opt/neurontcp
+	install -m 0755 neuron_tcp_server $(DESTDIR)/opt/neurontcp
 # *** EOF ***

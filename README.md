@@ -19,8 +19,6 @@ And run the installation script as root (requires make tools and libmodbus):
 This daemon provides standard TCP Modbus interface for all controllers from the [UniPi Neuron series].
 Handles low level communication on SPI with all of the embedded CPUs. Also handles creation of PTYs (pseudo-terminal or also virtual serial lines) in /dev/extcomm/x/y by the type of the product and is able to update the firmware of every CPU.
 
-**Provides access to 1-Wire as well**
-
 See the [downloads.unipi.technology] for mapping and explanation of Modbus registers.
 
 [Evok] (the official UniPi API) uses this daemon and provides other webservices as well as access to 1Wire sensors.

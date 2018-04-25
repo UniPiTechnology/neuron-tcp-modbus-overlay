@@ -52,7 +52,7 @@ Creates another three SPI devices for communication with all CPUs using custom G
 ### Installation
 Use the install script (as described above) or call `sh compile-dtc` to compile the overlay and copy it to /boot/overlays, then add line `dtoverlay=neuron-spi` to /boot/config.txt. Also make sure that the default SPI device is commented out in the config `#dtparam=spi=on`. 
 
-# To-do list & known bugs
+# Other notes & known issues
 * Parity of serial communication has to be set via the Modbus uart_config register; the rest of serial configuration (comm speed etc.) can be set when opening the PTY
 * Have a look instead at our [kernel driver source code] if you wish to try to integrate our more in-depth interface into your image.
 

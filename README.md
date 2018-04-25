@@ -1,7 +1,7 @@
 # TCP Modbus server for the Neuron series of UniPi devices
 
 Installation:
-Get the latest release source code, e.g. from:
+Check out the source code for the latest release, e.g. by calling:
 
  ```wget https://github.com/UniPiTechnology/neuron-tcp-modbus-overlay/archive/v1.0.3.zip```
  
@@ -9,15 +9,15 @@ Unzip it:
 
  ```unzip v1.0.3.zip```
 
-And run the installation script as root (requires make tools and libmodbus):
+And run the installation script as root (requires make and libmodbus):
 
  ```cd neuron-tcp-modbus-overlay-1.0.3 ```
  
   ```bash install.sh ```
 
 ## Neuron Modbus TCP Server
-This daemon provides standard TCP Modbus interface for all controllers from the [UniPi Neuron series].
-Handles low level communication on SPI with all of the embedded CPUs. Also handles creation of PTYs (pseudo-terminal or also virtual serial lines) in /dev/extcomm/x/y by the type of the product and is able to update the firmware of every CPU.
+This daemon provides a userspace implementation of a standard TCP Modbus interface for all controllers from the [UniPi Neuron series].
+It can handle low level communication on SPI with all embedded boards with all embedded Neuron CPIs. It also handles the creation of PTYs (pseudo-terminal (also known as virtual) serial lines) in /dev/extcomm/x/y and is able to update our firmware.
 
 See the [downloads.unipi.technology] for mapping and explanation of Modbus registers.
 

@@ -54,11 +54,10 @@ Use the install script (as described above) or call `sh compile-dtc` to compile 
 
 # To-do list & known bugs
 * Parity of serial communication has to be set via the Modbus uart_config register; the rest of serial configuration (comm speed etc.) can be set when opening the PTY
-* Currently only the standard Raspbian Jessie OS is supported
-* Rewrite this into Kernel driver
-
+* Have a look instead at our [kernel driver source code] if you wish to try to integrate our more in-depth interface into your image.
 
 [UniPi Neuron series]:http://unipi.technology
 [libmodbus]:http://libmodbus.org/
 [downloads.unipi.technology]:http://downloads.unipi.technology
 [Evok]:https://github.com/UniPiTechnology/evok
+[kernel driver source code]:http://git.unipi.technology:3000/UniPi/neuron-kernel

@@ -3,15 +3,15 @@
 Installation:
 Get the latest release source code, e.g. from:
 
- ```wget https://github.com/UniPiTechnology/neuron-tcp-modbus-overlay/archive/v1.0.1.zip```
+ ```wget https://github.com/UniPiTechnology/neuron-tcp-modbus-overlay/archive/v1.0.3.zip```
  
 Unzip it:
 
- ```unzip v1.0.1.zip```
+ ```unzip v1.0.3.zip```
 
 And run the installation script as root (requires make tools and libmodbus):
 
- ```cd neuron-tcp-modbus-overlay-1.0.1 ```
+ ```cd neuron-tcp-modbus-overlay-1.0.3 ```
  
   ```bash install.sh ```
 

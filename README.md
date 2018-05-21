@@ -1,23 +1,24 @@
 # TCP Modbus server for the Neuron series of UniPi devices
 
 Installation:
-Get the latest release source code, e.g. from:
 
- ```wget https://github.com/UniPiTechnology/neuron-tcp-modbus-overlay/archive/v1.0.1.zip```
+Check out the source code for the latest release, e.g. by calling:
+
+ ```wget https://github.com/UniPiTechnology/neuron-tcp-modbus-overlay/archive/v1.0.3.zip```
  
 Unzip it:
 
- ```unzip v1.0.1.zip```
+ ```unzip v1.0.3.zip```
 
-And run the installation script as root (requires make tools and libmodbus):
+And run the installation script as root (requires make and libmodbus):
 
- ```cd neuron-tcp-modbus-overlay-1.0.1 ```
+ ```cd neuron-tcp-modbus-overlay-1.0.3 ```
  
   ```bash install.sh ```
 
 ## Neuron Modbus TCP Server
-This daemon provides standard TCP Modbus interface for all controllers from the [UniPi Neuron series].
-Handles low level communication on SPI with all of the embedded CPUs. Also handles creation of PTYs (pseudo-terminal or also virtual serial lines) in /dev/extcomm/x/y by the type of the product and is able to update the firmware of every CPU.
+This daemon provides a userspace implementation of a standard TCP Modbus interface for all controllers from the [UniPi Neuron series].
+It can handle low level communication on SPI with all embedded boards with all embedded Neuron CPIs. It also handles the creation of PTYs (pseudo-terminal (also known as virtual) serial lines) in /dev/extcomm/x/y and is able to update our firmware.
 
 See the [downloads.unipi.technology] for mapping and explanation of Modbus registers.
 
@@ -52,13 +53,12 @@ Creates another three SPI devices for communication with all CPUs using custom G
 ### Installation
 Use the install script (as described above) or call `sh compile-dtc` to compile the overlay and copy it to /boot/overlays, then add line `dtoverlay=neuron-spi` to /boot/config.txt. Also make sure that the default SPI device is commented out in the config `#dtparam=spi=on`. 
 
-# To-do list & known bugs
+# Other notes & known issues
 * Parity of serial communication has to be set via the Modbus uart_config register; the rest of serial configuration (comm speed etc.) can be set when opening the PTY
-* Currently only the standard Raspbian Jessie OS is supported
-* Rewrite this into Kernel driver
-
+* Have a look instead at our [kernel driver source code] if you wish to try to integrate our more in-depth interface into your image.
 
 [UniPi Neuron series]:http://unipi.technology
 [libmodbus]:http://libmodbus.org/
 [downloads.unipi.technology]:http://downloads.unipi.technology
 [Evok]:https://github.com/UniPiTechnology/evok
+[kernel driver source code]:http://git.unipi.technology:3000/UniPi/neuron-kernel

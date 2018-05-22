@@ -1,1 +1,1 @@
-Repository:neuron-tcp-modbus-overlay ActiveBranch:[master] PrecedingRelease:v.1.0.3 PrecedingRevision:29(4867f35)
+Repository:neuron-tcp-modbus-overlay ActiveBranch:[master] PrecedingRelease:v.1.0.3 PrecedingRevision:30(175955a) LatestCommit:Tue May 22 16:29:11 CEST 2018

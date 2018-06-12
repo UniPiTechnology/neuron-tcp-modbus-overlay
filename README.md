@@ -4,11 +4,11 @@ Installation:
 
 Check out the source code for the latest release, e.g. by calling:
 
- ```wget https://github.com/UniPiTechnology/neuron-tcp-modbus-overlay/archive/v1.0.3.zip```
+ ```wget https://github.com/UniPiTechnology/neuron-tcp-modbus-overlay/archive/v.1.0.3.zip```
  
 Unzip it:
 
- ```unzip v1.0.3.zip```
+ ```unzip v.1.0.3.zip```
 
 And run the installation script as root (requires make and libmodbus):
 

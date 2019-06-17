@@ -1,3 +1,7 @@
+[![deprecated](http://badges.github.io/stability-badges/dist/deprecated.svg)](http://github.com/badges/stability-badges)
+# DEPRECATED
+This project has been replaced by UniPi kernel module. Please check the UniPi [kb] and/or the [Deb repository] wher the module can be found.
+
 # Legacy TCP Modbus server for the Neuron series of UniPi devices
 
 *IMPORTANT NOTE: See our [Evok] repository for up-to-date installation instructions; this repository is maintained solely to provide legacy support*
@@ -66,3 +70,5 @@ Use the install script (as described above) or call `sh compile-dtc` to compile 
 [downloads.unipi.technology]:http://downloads.unipi.technology
 [Evok]:https://github.com/UniPiTechnology/evok
 [kernel driver source code]:http://git.unipi.technology:3000/UniPi/neuron-kernel
+[kb]:http://kb.unipi.technology
+[Deb repository]:http://repo.unipi.technology

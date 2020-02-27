@@ -65,10 +65,10 @@ Use the install script (as described above) or call `sh compile-dtc` to compile 
 * Parity of serial communication has to be set via the Modbus uart_config register; the rest of serial configuration (comm speed etc.) can be set when opening the PTY
 * Have a look instead at our [kernel driver source code] if you wish to try to integrate our more in-depth interface into your image.
 
-[UniPi Neuron series]:http://unipi.technology
+[UniPi Neuron series]:https://unipi.technology
 [libmodbus]:http://libmodbus.org/
-[downloads.unipi.technology]:http://downloads.unipi.technology
+[downloads.unipi.technology]:https://kb.unipi.technology
 [Evok]:https://github.com/UniPiTechnology/evok
-[kernel driver source code]:http://git.unipi.technology:3000/UniPi/neuron-kernel
-[kb]:http://kb.unipi.technology
-[Deb repository]:http://repo.unipi.technology
+[kernel driver source code]:https://git.unipi.technology/UniPi/unipi-kernel
+[kb]:https://kb.unipi.technology
+[Deb repository]:https://repo.unipi.technology/debian/
